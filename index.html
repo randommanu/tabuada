@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tabuada diária</title>
+<meta name="theme-color" content="#4f5cf5">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-512.png">
+<meta name="apple-mobile-web-app-title" content="Tabuada">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Treino diário de tabuada com revisão dos erros e progresso por dia.">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--b1:#e3e9ff;--b2:#f4f6ff;--card:#fff;--tx:#14163a;--mu:#6b6f93;--bd:#e7e9f8;--ac:#4f5cf5;--ac2:#3b8bff;--u:#eef0fc;--u2:#c9d0f5;
+--g:#d4f1e0;--y:#fff0c9;--r:#fcd9e0;--ok:#12803f;--no:#c4284a;--or:#ff9d42;
+--pg:#e7f7ee;--pb:#e6f0ff;--py:#fff3d9;--tg:#12803f;--tb:#1f5cd6;--ty:#d97a0b;--ic:#fff;
+--sh:0 8px 28px rgba(60,80,200,.10),0 1px 2px rgba(20,22,58,.04)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--b1:#1b2150;--b2:#0f1120;--card:#1a1d33;--tx:#f1f2ff;--mu:#a4a8c9;--bd:#2b2f52;--ac:#7f8bff;--ac2:#4f9bff;--u:#242848;--u2:#454b7d;--g:#1f4a33;--y:#554a1b;--r:#5c2535;--ok:#6fdc9a;--no:#ff8aa5;--pg:#173a29;--pb:#172b52;--py:#4a3d14;--tg:#6fdc9a;--tb:#8fb8ff;--ty:#ffc266;--ic:#ffffff1a;--sh:0 8px 28px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{color-scheme:dark;--b1:#1b2150;--b2:#0f1120;--card:#1a1d33;--tx:#f1f2ff;--mu:#a4a8c9;--bd:#2b2f52;--ac:#7f8bff;--ac2:#4f9bff;--u:#242848;--u2:#454b7d;--g:#1f4a33;--y:#554a1b;--r:#5c2535;--ok:#6fdc9a;--no:#ff8aa5;--pg:#173a29;--pb:#172b52;--py:#4a3d14;--tg:#6fdc9a;--tb:#8fb8ff;--ty:#ffc266;--ic:#ffffff1a;--sh:0 8px 28px rgba(0,0,0,.35)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}
+body{background:linear-gradient(180deg,var(--b1),var(--b2) 380px) var(--b2);background-repeat:no-repeat;color:var(--tx);font:16px/1.5 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+main{max-width:560px;margin:0 auto;padding:20px 16px 120px}
+h1{font-size:30px;line-height:1.15;margin:6px 0 6px;letter-spacing:-.02em;font-weight:800}
+em{font-style:normal}
+h2{font-size:19px;font-weight:800;margin:26px 0 0}
+.mu{color:var(--mu);font-size:14px}
+.chip{display:inline-block;background:var(--card);border-radius:12px;padding:4px 12px;font-size:12px;font-weight:700;box-shadow:var(--sh);color:var(--mu)}
+.chip.ac{color:var(--ac)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:24px;padding:18px;margin-top:14px;box-shadow:var(--sh)}
+.card>b{font-size:16px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.stat b{display:block;font-size:26px}
+button{font:inherit;border:0;border-radius:999px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;padding:14px 18px;font-weight:700;width:100%;cursor:pointer;box-shadow:0 8px 20px rgba(59,100,245,.3)}
+button:active{transform:scale(.98)}
+button.sec{background:var(--card);color:var(--tx);box-shadow:var(--sh)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.top button{width:auto;padding:6px 14px;font-size:14px}
+.track{position:relative;height:6px;background:var(--u);margin:10px 9px 22px;border-radius:6px}
+.track i{position:absolute;left:0;top:0;height:6px;background:linear-gradient(90deg,var(--ac2),var(--ac));width:0;transition:width .3s;border-radius:6px}
+.track b{position:absolute;top:-6px;left:-9px;width:18px;height:18px;border-radius:50%;background:var(--or);border:3px solid #fff;box-shadow:0 2px 8px rgba(255,157,66,.6);transition:left .3s}
+.qc{text-align:center;padding:26px 16px 22px}
+.q{font-size:68px;font-weight:800;letter-spacing:-.02em;margin:14px 0 18px}
+input{font:inherit;font-size:32px;font-weight:700;text-align:center;width:100%;padding:12px;border-radius:18px;border:2px solid var(--bd);background:var(--u);color:var(--tx)}
+input:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 4px rgba(79,92,245,.18)}
+.fb{min-height:64px;text-align:center;font-size:18px;margin-top:14px;font-weight:700}
+.ok{color:var(--ok)}.no{color:var(--no)}
+.hd{display:flex;justify-content:space-between;align-items:center;margin:4px 0 16px}
+.hd h1{margin:0}
+.streak{background:#fff1de;color:#e2790f;font-weight:800;border-radius:16px;padding:8px 14px;font-size:15px;white-space:nowrap}
+.hero{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#4f5cf5,#2f7bf6);color:#fff;border-radius:28px;padding:18px;box-shadow:0 14px 32px rgba(59,100,245,.35)}
+.ring{position:relative;width:98px;height:98px;flex:none}.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:22px;font-weight:800}
+.hero h3{margin:0 0 4px;font-size:19px}.hero p{margin:0 0 12px;font-size:13px;opacity:.9;line-height:1.4}
+.hero button{background:#fff;color:#2f5cf0;box-shadow:none;padding:10px 16px;font-size:14px}
+.pl{display:flex;align-items:center;gap:14px;border-radius:24px;padding:14px;margin-top:12px;cursor:pointer}
+.pl.g{background:var(--pg);color:var(--tg)}.pl.b{background:var(--pb);color:var(--tb)}.pl.y{background:var(--py);color:var(--ty)}
+.pl .ic{width:54px;height:54px;border-radius:18px;background:var(--ic);display:grid;place-items:center;font-size:28px;flex:none}
+.pl b{display:block;font-size:17px}.pl span{font-size:13px;color:var(--tx);opacity:.75}
+.pl .go{margin-left:auto;width:38px;height:38px;border-radius:50%;background:var(--ic);display:grid;place-items:center;font-weight:800;flex:none}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.kpi{border-radius:22px;padding:14px 16px;box-shadow:var(--sh);background:var(--card);border:1px solid var(--bd)}
+.kpi:nth-child(1){background:var(--py);border-color:transparent}.kpi:nth-child(2){background:var(--pg);border-color:transparent}
+.kpi:nth-child(3){background:var(--pb);border-color:transparent}.kpi:nth-child(4){background:#efe9ff;border-color:transparent}
+@media (prefers-color-scheme:dark){.kpi:nth-child(4){background:#2a2250}}
+.kpi span{font-size:12px;font-weight:600}
+.kpi b{display:block;font-size:28px;line-height:1.2;margin:2px 0;font-weight:800}.kpi small{font-size:12px}
+.grid{display:grid;grid-template-columns:auto repeat(9,1fr);gap:3px;font-size:12px;text-align:center;margin-top:10px}
+.grid div{padding:6px 0;border-radius:7px;background:var(--u)}
+.grid .h{background:none;color:var(--mu);font-weight:700}
+.grid .g{background:var(--g)}.grid .y{background:var(--y)}.grid .r{background:var(--r)}
+.leg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--mu);margin-top:10px}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px}
+.svg{width:100%;height:auto;display:block;margin-top:10px}.svg text{font-size:11px;fill:var(--mu)}
+.tr{display:grid;grid-template-columns:34px 1fr 100px;gap:10px;align-items:center;font-size:14px;margin:7px 0}
+.bar2{height:8px;background:var(--u);border-radius:5px;overflow:hidden}.bar2 i{display:block;height:100%;border-radius:5px;background:var(--u2)}
+.bar2 .g{background:#3fb06f}.bar2 .y{background:#e0b030}.bar2 .r{background:#e0566f}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
+th{text-align:left;color:var(--mu);font-weight:600;font-size:12px}td,th{padding:8px 4px;border-bottom:1px solid var(--bd)}tr:last-child td{border:0}
+ul{padding-left:18px;margin:6px 0 0}
+.tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));width:min(92vw,420px);z-index:20;display:flex;gap:4px;background:linear-gradient(135deg,#1f5cf0,#2f7bf6);border-radius:999px;padding:7px;box-shadow:0 14px 30px rgba(31,92,240,.45)}
+.tabs a{flex:1;text-align:center;padding:8px 0 7px;border-radius:999px;font-weight:700;font-size:12px;line-height:1.2;color:rgba(255,255,255,.8);cursor:pointer;user-select:none}
+.tabs a span{display:block;font-size:20px}
+.tabs a.on{background:#fff;color:#2559e8}
+.bh{background:linear-gradient(160deg,#6a78ff,#2f6df6);color:#fff;border-radius:0 0 32px 32px;margin:-20px -16px 6px;padding:28px 22px 26px}
+.bh h1{margin:10px 0 6px}.bh .chip{background:rgba(255,255,255,.2);color:#fff;box-shadow:none}.bh p{margin:0;opacity:.9;font-size:14px}
+.dk{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:14px 16px;margin-top:12px;box-shadow:var(--sh);cursor:pointer}
+.dk>div{flex:1}.dk b{display:block;margin-bottom:8px}.dk span{font-weight:800;font-size:15px}
+.dk .bar2 i{background:var(--ac)}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:10px}.ph button{width:auto;padding:10px 20px}.ph button:disabled{opacity:.45;box-shadow:none;cursor:default}
+.dots{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
+.grp{display:flex;flex-wrap:wrap;gap:3px;background:var(--u);border-radius:12px;padding:6px;width:74px;justify-content:center}.grp i{width:10px;height:10px;border-radius:50%;background:var(--ac)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.opts button{padding:16px 0;font-size:24px}
+.stairs{display:flex;align-items:flex-end;gap:6px;justify-content:center;margin-top:14px}.stairs div{width:62px;background:var(--u);border-radius:10px 10px 0 0;display:flex;justify-content:center;padding-top:6px;font-weight:800;font-size:18px}.stairs div:last-child{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff}
+.sq{display:grid;gap:3px;justify-content:center;margin-top:14px}.sq i{width:14px;height:14px;border-radius:4px;background:var(--ac)}.sq i.c1{background:var(--ac2)}
+</style>
+</head>
+<body>
+<main id="app"><p class="mu">Carregando…</p></main>
+<script>
+const KEY = "tabuada-v1", SLOW = 5000;
+let data = { facts: {}, days: {}, weak: [] };
+let ref = null, saving = false, pending = false, store = "local";
+const $ = s => document.querySelector(s);
+const app = $("#app");
+const today = () => new Date().toLocaleDateString("sv");
+const rnd = n => Math.floor(Math.random() * n);
+const fmt = ms => (ms / 1000).toFixed(1).replace(".", ",") + " s";
+const sh = a => { for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const pairOf = k => { const [a, b] = k.split("x").map(Number); return Math.min(a, b) + "-" + Math.max(a, b); };
+
+/* ---------- persistência ---------- */
+async function init() {
+  try {
+    const db = await claude.use("db"), user = await claude.use("user");
+    if (db && user) {
+      const id = await user.id();
+      if (id) { ref = db.collection("data/users/" + id).doc("progress"); store = "db"; }
+    }
+  } catch (e) { console.error(e); }
+  let raw = null;
+  if (ref) { try { const s = await ref.get(); if (s.exists) raw = s.data().json; } catch (e) { console.error(e); } }
+  else { try { raw = localStorage.getItem(KEY); } catch (e) {} }
+  if (raw) { try { data = JSON.parse(raw); } catch (e) {} }
+  data.facts = data.facts || {}; data.days = data.days || {}; data.weak = data.weak || [];
+  home();
+}
+async function save() {
+  if (saving) { pending = true; return; }
+  saving = true;
+  try { const json = JSON.stringify(data); if (ref) await ref.set({ json }); else localStorage.setItem(KEY, json); }
+  catch (e) { console.error("save", e); }
+  saving = false;
+  if (pending) { pending = false; save(); }
+}
+
+/* ---------- lógica ---------- */
+const st = k => data.facts[k] || { o: 0, e: 0, t: 0, l: null, f: 0 };
+function level(k) {
+  const s = st(k), n = s.o + s.e;
+  if (!n) return "";
+  if ((s.f || 0) >= 3) return "g";
+  return s.l === 0 || !s.f ? "r" : "y";
+}
+function streak() {
+  let c = 0, d = new Date();
+  if (!(data.days[d.toLocaleDateString("sv")] || {}).done) d.setDate(d.getDate() - 1);
+  while ((data.days[d.toLocaleDateString("sv")] || {}).done) { c++; d.setDate(d.getDate() - 1); }
+  return c;
+}
+
+/* ---------- telas ---------- */
+const kpi = (l, v, s) => `<div class="kpi"><span class="mu">${l}</span><b>${v}</b><small class="mu">${s}</small></div>`;
+const avgAll = () => { let n = 0, t = 0; for (const s of Object.values(data.facts)) { n += s.o + s.e; t += s.t; } return n ? fmt(t / n) : "–"; };
+function chartDaily() {
+  const days = [], d = new Date(); d.setDate(d.getDate() - 13);
+  for (let i = 0; i < 14; i++) { const k = d.toLocaleDateString("sv"); days.push({ k, ...(data.days[k] || { n: 0, c: 0 }) }); d.setDate(d.getDate() + 1); }
+  if (!days.some(x => x.n)) return `<p class="mu">Faça o primeiro treino para ver sua evolução aqui.</p>`;
+  const W = 520, H = 190, L = 36, R = 30, T = 12, B = 26, pw = W - L - R, ph = H - T - B, max = Math.max(10, ...days.map(x => x.n)), step = pw / 14;
+  let bars = "", pts = [], lab = "";
+  days.forEach((x, i) => {
+    const cx = L + step * i + step / 2, h = x.n / max * ph;
+    bars += `<rect x="${cx - step * 0.3}" y="${T + ph - h}" width="${step * 0.6}" height="${h}" rx="3" fill="var(--u2)"/>`;
+    if (x.n) pts.push([cx, T + ph - x.c / x.n * ph]);
+    if (i % 2) lab += `<text x="${cx}" y="${H - 8}" text-anchor="middle">${x.k.slice(8)}/${x.k.slice(5, 7)}</text>`;
+  });
+  const gl = [0, 50, 100].map(p => { const y = T + ph - p / 100 * ph; return `<line x1="${L}" x2="${W - R}" y1="${y}" y2="${y}" stroke="var(--bd)"/><text x="${L - 6}" y="${y + 4}" text-anchor="end">${p}%</text>`; }).join("");
+  const path = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+  const dots = pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="var(--ac)"/>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" class="svg" role="img" aria-label="Evolução diária">${gl}${bars}<path d="${path}" fill="none" stroke="var(--ac)" stroke-width="2.5" stroke-linejoin="round"/>${dots}${lab}<text x="${W - R + 5}" y="${T + 8}">${max}</text></svg><div class="leg"><span><i style="background:var(--ac)"></i>% de acertos</span><span><i style="background:var(--u2)"></i>respostas por dia</span></div>`;
+}
+function chartTables() {
+  let h = "";
+  for (let t = 2; t <= 10; t++) {
+    let o = 0, e = 0, ms = 0;
+    for (let b = 2; b <= 10; b++) { const s = st(t + "x" + b); o += s.o; e += s.e; ms += s.t; }
+    const n = o + e, acc = n ? o / n : 0, c = !n ? "" : acc < 0.6 ? "r" : acc < 0.85 ? "y" : "g";
+    h += `<div class="tr"><b>×${t}</b><div class="bar2"><i class="${c}" style="width:${acc * 100}%"></i></div><span class="mu">${n ? Math.round(acc * 100) + "% · " + fmt(ms / n) : "–"}</span></div>`;
+  }
+  return h;
+}
+function hardest() {
+  const r = Object.entries(data.facts).map(([k, s]) => ({ k, s, n: s.o + s.e })).filter(x => x.s.e > 0).sort((x, y) => y.s.e - x.s.e || y.s.e / y.n - x.s.e / x.n).slice(0, 5);
+  if (!r.length) return `<p class="mu">Nenhum erro registrado ainda.</p>`;
+  return `<table><tr><th>Conta</th><th>Erros</th><th>Acertos</th><th>Tempo médio</th></tr>` + r.map(({ k, s, n }) => { const [a, b] = k.split("x"); return `<tr><td><b>${a} × ${b}</b> = ${a * b}</td><td>${s.e}</td><td>${Math.round(s.o / n * 100)}%</td><td>${fmt(s.t / n)}</td></tr>`; }).join("") + `</table>`;
+}
+function home() {
+  const dominated = Object.keys(data.facts).filter(k => level(k) === "g").length;
+  const dt = data.days[today()] || { n: 0, c: 0, s: 0 };
+  let grid = '<div class="h"></div>';
+  for (let b = 2; b <= 10; b++) grid += `<div class="h">${b}</div>`;
+  for (let a = 2; a <= 10; a++) {
+    grid += `<div class="h">${a}×</div>`;
+    for (let b = 2; b <= 10; b++) {
+      const k = a + "x" + b, s = st(k), n = s.o + s.e;
+      grid += `<div class="${level(k)}" title="${a} × ${b} = ${a * b}${n ? ` · ${s.o} certas, ${s.e} erros, média ${fmt(s.t / n)}` : " · ainda não treinada"}">${a * b}</div>`;
+    }
+  }
+  const total = Object.values(data.days).reduce((x, d) => x + d.n, 0);
+  const hit = Object.values(data.days).reduce((x, d) => x + d.c, 0);
+  const nw = (data.weak || []).length;
+  app.innerHTML = `${tabs(0)}
+    <div class="hd"><div><div class="mu">${new Date().getHours() < 12 ? "Bom dia" : new Date().getHours() < 18 ? "Boa tarde" : "Boa noite"} 👋</div><h1>Vamos treinar hoje?</h1></div><span class="streak">🔥 ${streak()}</span></div>
+    <div class="hero">
+      <div class="ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="10"/><circle cx="50" cy="50" r="42" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-dasharray="${(dominated / 81 * 264).toFixed(1)} 264"/></svg><b>${Math.round(dominated / 81 * 100)}%</b></div>
+      <div><h3>${dominated ? "Continue assim!" : "Bora começar!"}</h3><p>${dominated}/81 contas dominadas.${dt.s ? " Hoje você já treinou " + dt.s + "x." : ""}</p><button id="go">${dt.s ? "Treinar de novo" : "Treino de hoje"}</button></div>
+    </div>
+    <h2>Plano de hoje</h2>
+    <div class="pl g" onclick="start()"><div class="ic">⚡</div><div><b>Treino diário</b><span>${nw ? nw + " conta(s) para reforçar" : "Todas as contas, no seu ritmo"}</span></div><div class="go">›</div></div>
+    <div class="pl b" onclick="learnMenu()"><div class="ic">🎮</div><div><b>Aprender</b><span>Fases e estrelas por tabuada</span></div><div class="go">›</div></div>
+    <div class="pl y" onclick="practiceMenu()"><div class="ic">🎯</div><div><b>Praticar</b><span>Uma tabuada por vez</span></div><div class="go">›</div></div>
+    <h2>Seu progresso</h2>
+    <div class="mu">${store === "db" ? "Salvo na nuvem" : "Salvo neste navegador"}</div>
+    <div class="kpis">
+      ${kpi("Sequência", streak(), "dias seguidos")}
+      ${kpi("Dominadas", dominated + "/81", Math.round(dominated / 81 * 100) + "% da tabuada")}
+      ${kpi("Acertos", total ? Math.round(hit / total * 100) + "%" : "–", total + " respostas")}
+      ${kpi("Tempo médio", avgAll(), "por resposta")}
+    </div>
+    <div class="card"><b>Evolução nos últimos 14 dias</b>${chartDaily()}</div>
+    <div class="card"><b>Desempenho por tabuada</b><div class="mu" style="margin-bottom:6px">Taxa de acerto e tempo médio de resposta</div>${chartTables()}</div>
+    <div class="card"><b>Contas que mais te desafiam</b>${hardest()}</div>
+    <div class="card"><b>Mapa da tabuada</b>
+      <div class="grid">${grid}</div>
+      <div class="leg"><span><i style="background:var(--u)"></i>não vista</span><span><i style="background:var(--r)"></i>ainda não sei</span><span><i style="background:var(--y)"></i>quase</span><span><i style="background:var(--g)"></i>dominada (3 rápidas seguidas)</span></div>
+    </div>`;
+  $("#go").onclick = () => start();
+}
+
+/* ---------- treino com ciclo de repetição ---------- */
+let Q = [], S = [], cur = null, phase = "ask", t0 = 0, sess;
+function start(only) {
+  const all = only || [];
+  if (!only) for (let a = 2; a <= 10; a++) for (let b = 2; b <= 10; b++) all.push(a + "x" + b);
+  const weak = sh((data.weak || []).filter(k => all.includes(k)));
+  Q = [...weak, ...sh(all.filter(k => !weak.includes(k)))];
+  S = []; sess = { only, tot: all.length, first: 0, n: 0, ms: 0, miss: {}, slow: {} };
+  app.innerHTML = `
+    <div class="top"><span class="chip" id="prog"></span><button class="sec" id="quit">Sair</button></div>
+    <div class="track"><i id="bar"></i><b id="orb"></b></div>
+    <div class="card qc"><span class="chip ac" id="tag"></span><div class="q" id="q"></div>
+    <input id="in" type="text" inputmode="numeric" autocomplete="off" aria-label="Resposta">
+    <div class="fb" id="fb"></div></div>`;
+  $("#quit").onclick = () => (sess.only ? practiceMenu() : home());
+  $("#in").addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    if (phase === "ask") answer();
+    else if (phase === "fix") { const [a, b] = cur.q.split("x"); if (+$("#in").value === a * b) show(); else $("#in").select(); }
+  });
+  show();
+}
+function pick() {
+  let i = S.findIndex(x => x.w <= 0), it;
+  if (i < 0 && Q.length) return { q: Q.shift(), tag: "Nova" };
+  if (i < 0 && S.length) { const m = Math.min(...S.map(x => x.w)); i = S.findIndex(x => x.w === m); }
+  if (i < 0) return null;
+  return S.splice(i, 1)[0];
+}
+function schedule(k, imm) {
+  const [a, b] = k.split("x"), inv = b + "x" + a, p = pairOf(k);
+  const steps = [];
+  if (imm) steps.push([k, 0, "Repita agora"]);
+  steps.push([inv, 4, "Inversa"], [k, 6, "Revisão"], [inv, 8, "Inversa"]);
+  const [q, w, tag] = steps[0];
+  S.push({ q, w, tag, pair: p, rest: steps.slice(1) });
+}
+function show() {
+  const p = pick();
+  if (!p) return finish();
+  cur = p; S.forEach(x => x.w--);
+  const [a, b] = p.q.split("x"), done = sess.tot - Q.length, pc = done / sess.tot * 100;
+  $("#q").textContent = `${a} × ${b}`;
+  $("#tag").textContent = p.tag;
+  $("#prog").textContent = `${done}/${sess.tot}` + (S.length ? ` · ${S.length} em revisão` : "");
+  $("#bar").style.width = pc + "%"; $("#orb").style.left = `calc(${pc}% - 9px)`;
+  const i = $("#in"); i.value = ""; i.disabled = false; $("#fb").textContent = "";
+  phase = "ask"; i.focus(); t0 = performance.now();
+}
+function answer() {
+  const v = $("#in").value.trim();
+  if (v === "") return;
+  const ms = performance.now() - t0, k = cur.q, [a, b] = k.split("x").map(Number), p = pairOf(k);
+  const right = Number(v) === a * b, slow = ms > SLOW, s = st(k);
+  data.facts[k] = { o: s.o + (right ? 1 : 0), e: s.e + (right ? 0 : 1), t: s.t + ms, l: right ? 1 : 0, f: right && !slow ? (s.f || 0) + 1 : 0 };
+  const d = data.days[today()] || (data.days[today()] = { n: 0, c: 0, s: 0 });
+  d.n++; d.ms = (d.ms || 0) + ms; if (right) d.c++;
+  sess.n++; sess.ms += ms;
+  const fb = $("#fb"), isNew = cur.tag === "Nova";
+  if (!right) {
+    sess.miss[k] = (sess.miss[k] || 0) + 1;
+    S = S.filter(x => x.pair !== p); schedule(k, true);
+    fb.innerHTML = `<span class="no">Errou.</span> ${a} × ${b} = <b>${a * b}</b><br><span class="mu">Digite ${a * b} para continuar</span>`;
+    phase = "fix"; const i = $("#in"); i.value = ""; i.focus();
+  } else {
+    $("#in").disabled = true; phase = "wait";
+    if (slow) sess.slow[k] = 1;
+    if (cur.rest && cur.rest.length) { const [q, w, tag] = cur.rest[0]; S.push({ q, w, tag, pair: p, rest: cur.rest.slice(1) }); }
+    if (isNew && !slow) sess.first++;
+    fb.innerHTML = slow ? `<span class="no">Certo, mas devagar</span> <span class="mu">${fmt(ms)} · volta amanhã</span>` : `<span class="ok">Certo! ✓</span> <span class="mu">${fmt(ms)}</span>`;
+    setTimeout(() => { if (phase === "wait" && cur.q === k) show(); }, slow ? 1100 : 600);
+  }
+  save();
+}
+function finish() {
+  if (!sess.only) { const d = data.days[today()]; d.s++; d.done = true;
+  data.weak = [...new Set([...Object.keys(sess.miss), ...Object.keys(sess.slow)])]; }
+  save();
+  const worst = Object.entries(sess.miss).sort((x, y) => y[1] - x[1]).slice(0, 5)
+    .map(([k, n]) => `<li>${k.replace("x", " × ")} = ${k.split("x").reduce((p, c) => p * c, 1)} <span class="mu">(${n} erro${n > 1 ? "s" : ""})</span></li>`).join("");
+  app.innerHTML = `
+    <span class="chip ac">Treino concluído</span>
+    <h1>Mandou <em>bem!</em> 🎉</h1>
+    <div class="card row">
+      <div class="stat"><b>${sess.first}/${sess.tot}</b><span class="mu">certas e rápidas de primeira</span></div>
+      <div class="stat"><b>${fmt(sess.ms / sess.n)}</b><span class="mu">tempo médio</span></div>
+    </div>
+    ${worst ? `<div class="card"><b>Para reforçar</b><ul>${worst}</ul>${sess.only ? "" : `<p class="mu" style="margin:10px 0 0">${data.weak.length} conta(s) abrem o treino de amanhã.</p>`}</div>` : `<div class="card">Nenhum erro hoje. Excelente!</div>`}
+    <div class="card"><button id="h">${sess.only ? "Voltar às tabuadas" : "Ver meu progresso"}</button></div>`;
+  $("#h").onclick = () => (sess.only ? practiceMenu() : home());
+}
+/* ---------- abas: aprender e praticar ---------- */
+const TABS = ["Treino", "Aprender", "Praticar"];
+const TI = ["🏠", "🎮", "🎯"];
+const tabs = i => `<nav class="tabs">${TABS.map((t, j) => `<a class="${j === i ? "on" : ""}" onclick="nav(${j})"><span>${TI[j]}</span>${t}</a>`).join("")}</nav>`;
+function nav(i) { [home, learnMenu, practiceMenu][i](); }
+const TRICK = {
+  2: "É o dobro! 2 × 7 é 7 + 7. O resultado sempre termina em 0, 2, 4, 6 ou 8.",
+  3: "3 × b = (2 × b) + b. Ex.: 3 × 7 = 14 + 7 = 21. Os dígitos do resultado somam 3, 6 ou 9.",
+  4: "É o dobro do dobro! 4 × 7: o dobro de 7 é 14, o dobro de 14 é 28.",
+  5: "Termina sempre em 0 ou 5. Ou pense na metade de b × 10: 5 × 8 = metade de 80 = 40.",
+  6: "6 × b = (5 × b) + b. Ex.: 6 × 7 = 35 + 7 = 42.",
+  7: "7 × b = (5 × b) + (2 × b). Ex.: 7 × 8 = 40 + 16 = 56.",
+  8: "É o dobro do dobro do dobro! 8 × 6: 6 → 12 → 24 → 48.",
+  9: "9 × b = (10 × b) − b. Ex.: 9 × 7 = 70 − 7 = 63. Os dígitos do resultado somam 9.",
+  10: "É só colocar um zero! 10 × 7 = 70."
+};
+const grp = n => `<div class="grp">${"<i></i>".repeat(n)}</div>`;
+const mast = t => { let g = 0; for (let b = 2; b <= 10; b++) if (level(t + "x" + b) === "g") g++; return g; };
+const opts4 = (a, n) => { const o = [a]; for (const d of sh([n, -n, 1, -1, 2 * n])) if (a + d > 0 && o.length < 4) o.push(a + d); return sh(o); };
+const PH = [["Degraus", "🪜"], ["Grade", "🔲"], ["Truque", "💡"], ["Relâmpago", "⚡"], ["Chefão", "👑"]];
+const INTRO = [n => `Contar de ${n} em ${n} é a base de tudo. Cada degrau da escada soma ${n}.`,
+  n => `${n} × b são b linhas com ${n} quadradinhos em cada. Conte de ${n} em ${n}, linha por linha.`,
+  n => TRICK[n] + " Quebre a conta em partes fáceis.",
+  n => "Responda rápido! Cada conta tem 8 segundos. Errar ou estourar o tempo custa uma vida.",
+  n => "Chefão! Contas misturadas, sem ajuda. Você tem 3 vidas."];
+const stars = n => (data.learn || {})[n] || [0, 0, 0, 0, 0];
+let G = null, tm = null;
+function learnMenu() {
+  clearInterval(tm);
+  app.innerHTML = `${tabs(1)}<div class="bh"><span class="chip">Aventura</span><h1>Aprenda jogando</h1><p>Cada tabuada tem 5 fases. Ganhe até 3 ⭐ em cada uma.</p></div>${[2, 3, 4, 5, 6, 7, 8, 9, 10].map(t => { const v = stars(t).reduce((x, y) => x + y, 0); return `<div class="dk" onclick="learnMap(${t})"><div><b>Tabuada do ${t}</b><div class="bar2"><i style="width:${v / 15 * 100}%"></i></div></div><span>⭐ ${v}/15</span></div>`; }).join("")}`;
+}
+function learnMap(n) {
+  clearInterval(tm); const s = stars(n);
+  app.innerHTML = `${tabs(1)}<div class="top" style="margin-top:14px"><span class="chip ac">Tabuada do ${n}</span><button class="sec" onclick="learnMenu()">Voltar</button></div>
+    ${PH.map((p, i) => { const lock = i > 0 && !s[i - 1]; return `<div class="card ph"><div><b>${p[1]} Fase ${i + 1}: ${p[0]}</b><div class="mu">${"⭐".repeat(s[i])}${"☆".repeat(3 - s[i])}</div></div><button ${lock ? "disabled" : ""} onclick="intro(${n},${i})">${lock ? "🔒" : "Jogar"}</button></div>`; }).join("")}`;
+}
+function intro(n, i) {
+  app.innerHTML = `${tabs(1)}<div style="height:14px"></div><span class="chip ac">Fase ${i + 1} de 5</span><h1>${PH[i][1]} <em>${PH[i][0]}</em></h1>
+    <div class="card"><p style="margin:0 0 14px;font-size:18px">${INTRO[i](n)}</p><button onclick="run(${n},${i})">Bora!</button></div>
+    <div class="card"><button class="sec" onclick="learnMap(${n})">Voltar</button></div>`;
+}
+function mkq(n, i, b, j) {
+  const a = n * b; let h, ans = a, hint = `${n} × ${b} = ${a}`;
+  if (i === 0) {
+    const s = 1 + rnd(3), t = [0, 1, 2].map(x => n * (s + x)); ans = n * (s + 3); hint = `${t[2]} + ${n} = ${ans}`;
+    h = `<div class="stairs">${[...t, "?"].map((v, x) => `<div style="height:${34 + x * 26}px">${v}</div>`).join("")}</div><p class="mu" style="margin:10px 0 0">Cada degrau soma ${n}. Qual o próximo?</p>`;
+  } else if (i === 1) {
+    h = `<div class="sq" style="grid-template-columns:repeat(${n},14px)">${Array.from({ length: n * b }, (_, x) => `<i class="c${Math.floor(x / n) % 2}"></i>`).join("")}</div><p class="mu" style="margin:10px 0 0">${b} linhas de ${n}. Quantos quadradinhos?</p>`;
+  } else if (i === 2) {
+    const x = b > 5 ? 5 : b - 1, y = b - x;
+    h = `<div class="q" style="font-size:44px;margin:12px 0 4px">${n} × ${b}</div><p style="margin:0">= (${n} × ${x}) + (${n} × ${y})<br>= ${n * x} + ${n * y}</p><p class="mu" style="margin:8px 0 0">Qual o total?</p>`;
+  } else h = `<div class="q">${i === 4 && j % 2 ? b + " × " + n : n + " × " + b}</div>`;
+  return { h, ans, hint };
+}
+function run(n, i) {
+  const bs = sh([2, 3, 4, 5, 6, 7, 8, 9, 10]), N = [6, 6, 6, 8, 10][i];
+  G = { n, i, qs: Array.from({ length: N }, (_, j) => mkq(n, i, bs[j % 9], j)), k: 0, lives: 3, score: 0, combo: 0, lock: false };
+  ask();
+}
+function ask() {
+  clearInterval(tm);
+  const q = G.qs[G.k], tmo = G.i === 3 ? 8000 : 0, pc = G.k / G.qs.length * 100;
+  app.innerHTML = `${tabs(1)}<div class="top" style="margin-top:14px"><span class="chip">${"❤️".repeat(G.lives)}</span><span class="chip ac">⭐ ${G.score}${G.combo > 1 ? " · 🔥" + G.combo : ""}</span><button class="sec" onclick="learnMap(${G.n})">Sair</button></div>
+    <div class="track"><i style="width:${pc}%"></i><b style="left:calc(${pc}% - 9px)"></b></div>
+    <div class="card qc"><span class="chip ac">${PH[G.i][1]} ${PH[G.i][0]} · ${G.k + 1}/${G.qs.length}</span>${q.h}
+    ${tmo ? `<div class="bar2" style="margin-top:14px"><i id="tb" style="width:100%;background:var(--ac)"></i></div>` : ""}
+    <input id="in" type="text" inputmode="numeric" autocomplete="off" aria-label="Resposta" style="margin-top:14px">
+    <button id="ok" style="margin-top:12px">Responder</button><div class="fb" id="fb"></div></div>`;
+  $("#in").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); reply(false); } });
+  $("#ok").onclick = () => reply(false);
+  $("#in").focus();
+  if (tmo) { const t0 = Date.now(); tm = setInterval(() => { const p = 1 - (Date.now() - t0) / tmo; $("#tb").style.width = Math.max(0, p * 100) + "%"; if (p <= 0) reply(true); }, 100); }
+}
+function reply(to) {
+  if (G.lock) return;
+  const v = $("#in").value.trim(); if (!to && v === "") return;
+  G.lock = true; clearInterval(tm);
+  const q = G.qs[G.k], r = !to && +v === q.ans, fb = $("#fb"); $("#in").disabled = true;
+  if (r) { G.combo++; const p = 10 + Math.min(G.combo, 5) * 2; G.score += p; fb.innerHTML = `<span class="ok">Certo! +${p}</span>`; }
+  else { G.combo = 0; G.lives--; fb.innerHTML = `<span class="no">${to ? "Tempo!" : "Errou."}</span> ${q.hint}`; }
+  setTimeout(() => { G.lock = false; if (!G.lives) return end(false); ++G.k < G.qs.length ? ask() : end(true); }, r ? 700 : 2000);
+}
+function end(w) {
+  clearInterval(tm); const n = G.n, i = G.i, st = w ? G.lives : 0;
+  if (w) { data.learn = data.learn || {}; const a = data.learn[n] || [0, 0, 0, 0, 0]; a[i] = Math.max(a[i], st); data.learn[n] = a; save(); }
+  const nx = w && i < 4 ? `intro(${n},${i + 1})` : w ? `practice(${n})` : `run(${n},${i})`;
+  app.innerHTML = `${tabs(1)}<div style="height:14px"></div><h1>${w ? "Fase <em>concluída!</em> 🎉" : "Quase! <em>Tente de novo</em>"}</h1>
+    <div class="card qc"><div style="font-size:40px">${w ? "⭐".repeat(st) + "☆".repeat(3 - st) : "💔"}</div><p class="mu" style="margin:6px 0 0">${G.score} pontos</p></div>
+    <div class="card"><button onclick="${nx}">${w && i < 4 ? "Próxima fase" : w ? "Praticar a tabuada do " + n : "Tentar de novo"}</button></div>
+    <div class="card"><button class="sec" onclick="learnMap(${n})">Mapa das fases</button></div>`;
+}
+function practiceMenu() {
+  app.innerHTML = `${tabs(2)}<div class="bh"><span class="chip">Uma tabuada por vez</span><h1>Pratique cada tabuada</h1><p>Fica dominada com 3 acertos rápidos seguidos em cada conta.</p></div>${[2, 3, 4, 5, 6, 7, 8, 9, 10].map(t => { const v = mast(t); return `<div class="dk" onclick="practice(${t})"><div><b>Tabuada do ${t}</b><div class="bar2"><i style="width:${v / 9 * 100}%"></i></div></div><span>${v}/9</span></div>`; }).join("")}`;
+}
+function practice(t) { const k = []; for (let b = 2; b <= 10; b++) k.push(t + "x" + b); start(k); }
+
+init();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js").catch(function (e) { console.error("sw", e); });
+  });
+}
+</script>
+</body>
+</html>
